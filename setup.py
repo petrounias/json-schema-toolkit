@@ -50,7 +50,6 @@ setup(
     author = "Alexis Petrounias <www.petrounias.org>",
     maintainer = "Alexis Petrounias <www.petrounias.org>",
     description = "JSON Schema Toolkit",
-    long_description = open('README.md').read(),
     keywords = ['json', 'schema', 'validation', 'django', 'sql', 'postgresql', ],
     license = 'BSD',
     url = 'http://www.petrounias.org/software/json-schema-toolkit/',
