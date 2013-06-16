@@ -54,6 +54,11 @@ Optionally, for JSON SQL constraints:
 - PostgreSQL >= 9.3
 
 
+Optionally, for testing:
+
+- unittest2 >= 0.5.1
+
+
 Obtaining
 =========
 
