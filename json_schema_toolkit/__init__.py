@@ -35,10 +35,10 @@
 """
 
 __status__ = "alpha"
-__version__ = "1.0.0a"
+__version__ = "1.0.0a1"
 __maintainer__ = (u"Alexis Petrounias <www.petrounias.org>", )
 __author__ = (u"Alexis Petrounias <www.petrounias.org>", )
 
 
-VERSION = (1, 0, 0, 'alpha', 0)
+VERSION = (1, 0, 0, 'alpha', 1)
 
