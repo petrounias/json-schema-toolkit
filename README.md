@@ -19,7 +19,8 @@ data type. If PostgreSQL >= 9.3 is used, supports custom JSON SQL constraint
 generation for the Django Model.
 
 Extends json_document to provide nullable fields (in additional to optional
-fields), as well as convenience input transformations for data such as
+fields), deletion of members (through del), a Pythonic API for dot notation
+member access, as well as convenience input transformations for data such as
 dates and times, time deltas, and others.
 
 * JSON Schema: < http://json-schema.org/ >
@@ -120,8 +121,8 @@ ability to include this software's requirements in proprietary software. This
 software only links against the aforementioned libraries in accordance with
 their license.
 
-Copyright (c) 2013 Alexis Petrounias <www.petrounias.org>,
-All rights reserved.
+Copyright (c) 2013 Alexis Petrounias < www.petrounias.org >,
+all rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
