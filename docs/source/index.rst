@@ -136,8 +136,13 @@ Based on work and feedback by Zygmunt Krynicki < http://www.suxx.pl/ >
 License
 =============================
 
-Copyright (c) 2013, Alexis Petrounias <www.petrounias.org>
+Released under the OSI-approved BSD license. Please note that json_document and
+json_schema_validator are LGPLv3 and not copyleft-free, so this may affect your
+ability to include this software's requirements in proprietary software. This
+software only links against the aforementioned libraries in accordance with
+their license.
 
+Copyright (c) 2013 Alexis Petrounias <www.petrounias.org>,
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -164,7 +169,6 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
 ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
 
 
 Indices and tables
