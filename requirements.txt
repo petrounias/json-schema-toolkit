@@ -1,0 +1,3 @@
+json-document==0.8
+json-schema-validator==2.3
+simplejson==3.3.0
