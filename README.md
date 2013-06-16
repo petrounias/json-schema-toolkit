@@ -4,12 +4,13 @@ JSON Schema Toolkit
 Programmatic building of JSON schemas (recursive field mappings) with
 validation, a Django JSON Field, and native PostgreSQL JSON type constraints.
 
+Documentation https://json-schema-toolkit.readthedocs.org
 
 Overview
 ========
 
-Built on top of `json_document <https://github.com/zyga/json-document/>`_ and
-`json_schema_validator <https://github.com/zyga/json-schema-validator/>`_, with
+Built on top of https://github.com/zyga/json-document/ and
+https://github.com/zyga/json-schema-validator/, with
 powerful support for building and validating JSON documents. Can be used to
 programmatically build JSON schemas by mapping fields to a document or
 recursively to other fields, as well as used for validating a Django JSON field
