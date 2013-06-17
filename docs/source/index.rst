@@ -1,18 +1,15 @@
-.. JSON Schema Toolkit documentation master file, created by
-   sphinx-quickstart on Sun Jun 16 15:48:13 2013.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+.. JSON Schema Toolkit documentation master file
 
-Welcome to JSON Schema Toolkit's documentation!
-===============================================
+JSON Schema Toolkit
+===================
 
 Programmatic building of JSON schemas (recursive field mappings) with
 validation, a Django JSON Field, and native PostgreSQL JSON type constraints.
 
 
-=============================
+========
 Overview
-=============================
+========
 
 Built on top of `json_document <https://github.com/zyga/json-document/>`_ and
 `json_schema_validator <https://github.com/zyga/json-schema-validator/>`_, with
@@ -34,9 +31,9 @@ dates and times, time deltas, and others.
   < http://www.postgresql.org/docs/9.3/static/functions-json.html >
 
 
-=============================
+=============
 Prerequisites
-=============================
+=============
 
 Core:
 
@@ -66,9 +63,9 @@ Optionally, for testing:
 - unittest2 >= 0.5.1
 
 
-=============================
+=========
 Obtaining
-=============================
+=========
 
 - Author's website for the project: http://www.petrounias.org/software/json-schema-toolkit/
 
@@ -77,9 +74,9 @@ Obtaining
 - Mercurial repository on BitBucket: http://www.bitbucket.org/petrounias/json-schema-toolkit/
 
 
-=============================
+============
 Installation
-=============================
+============
 
 Ensure the required packages json_document and json_schema_validator are
 installed, and then install json_schema_toolkit:
@@ -93,9 +90,9 @@ Via pip and pypi::
     pip install json-schema-toolkit
 
 
-=============================
+=================
 Table of Contents
-=============================
+=================
 .. toctree::
    :maxdepth: 6
 
@@ -107,40 +104,40 @@ Table of Contents
    technical.rst
 
 
-=============================
+=============
 Release Notes
-=============================
+=============
 
-v1.0.0 alpha, 16 June 2013 -- Initial public release.
+- v1.0.0 alpha @ 16 June 2013 Initial public release.
 
 
-=============================
+==================
 Development Status
-=============================
+==================
 
 Actively developed and maintained. Currently used in production in proprietary
 projects by the author and his team.
 
 
-=============================
+===========
 Future Work
-=============================
+===========
 
 - Django Field and custom PostgreSQL JSON data type support.
 
 
-=============================
+============
 Contributors
-=============================
+============
 
 Written and maintained by Alexis Petrounias < http://www.petrounias.org/ >
 
 Based on work and feedback by Zygmunt Krynicki < http://www.suxx.pl/ >
 
 
-=============================
+=======
 License
-=============================
+=======
 
 Released under the OSI-approved BSD license. Please note that json_document and
 json_schema_validator are LGPLv3 and not copyleft-free, so this may affect your
@@ -148,7 +145,7 @@ ability to include this software's requirements in proprietary software. This
 software only links against the aforementioned libraries in accordance with
 their license.
 
-Copyright (c) 2013 Alexis Petrounias <www.petrounias.org>,
+Copyright (c) 2013 Alexis Petrounias < www.petrounias.org >,
 all rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -176,7 +173,7 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
+==================
 Indices and tables
 ==================
 
