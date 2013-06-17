@@ -4,6 +4,8 @@ JSON Schema Toolkit
 Programmatic building of JSON schemas (recursive field mappings) with
 validation, a Django JSON Field, and native PostgreSQL JSON type constraints.
 
+Version 1.0.0 alpha
+
 Documentation https://json-schema-toolkit.readthedocs.org
 
 Overview
@@ -88,7 +90,7 @@ Via pip and pypi::
 Release Notes
 =============
 
-v1.0.0 alpha, 16 June 2013 -- Initial public release.
+- v1.0.0 alpha @ 16 June 2013 Initial public release.
 
 
 Development Status
@@ -101,7 +103,7 @@ projects by the author and his team.
 Future Work
 ===========
 
-- ?
+- Django Field and custom PostgreSQL JSON data type support.
 
 
 Contributors
