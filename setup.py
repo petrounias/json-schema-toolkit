@@ -69,5 +69,5 @@ setup(
         'json_schema_validator >= 2.3',
     ],
     setup_requires = [ 'versiontools >= 1.3.1', ],
-    tests_require = [ ],
+    tests_require = [ 'unittest2 >= 0.5.1' ],
     zip_safe = True)
