@@ -162,17 +162,19 @@ class JSONDocumentField(object):
     TYPE = 'any'
 
     def __init__(self, title = None, description = None, default = None,
-        optional = False, null = False, content = None, implementation = None):
+        optional = False, null = False, pattern = None, content = None,
+        implementation = None):
         super(JSONDocumentField, self).__init__()
         self.title = title
         self.description = description
         self.default = default
         self.optional = optional
         self.null = null
+        self.pattern = pattern
         self.content = content
         self.implementation = implementation or JSONDocumentFragment
 
-    def _generate_schema(self) :
+    def _generate_schema(self):
         return {
             'type' : self.TYPE if not self.null else [ self.TYPE, 'null', ],
             'title' : self.title,
@@ -180,6 +182,7 @@ class JSONDocumentField(object):
             'default' : self.default,
             'optional' : self.optional,
             'null' : self.null,
+            'pattern' : self.pattern,
             'properties' : {},
             '__field' : self,
             '__fragment_cls' : self.implementation,
@@ -193,9 +196,12 @@ class JSONBooleanField(JSONDocumentField):
     TYPE = 'boolean'
 
     def __init__(self, title = None, description = None, default = None,
-        optional = False, null = False, content = None, implementation = None):
-        super(JSONBooleanField, self).__init__(title, description, default,
-            optional, null, content, implementation)
+        optional = False, null = False, pattern = None, content = None,
+        implementation = None):
+        super(JSONBooleanField, self).__init__(title = title,
+            description = description, default = default, optional = optional,
+            null = null, pattern = pattern, content = content,
+            implementation = implementation)
 
 
 class JSONIntegerField(JSONDocumentField):
@@ -205,9 +211,12 @@ class JSONIntegerField(JSONDocumentField):
     TYPE = 'integer'
 
     def __init__(self, title = None, description = None, default = None,
-        optional = False, null = False, content = None, implementation = None):
-        super(JSONIntegerField, self).__init__(title, description, default,
-            optional, null, content, implementation)
+        optional = False, null = False, pattern = None, content = None,
+        implementation = None):
+        super(JSONIntegerField, self).__init__(title = title,
+            description = description, default = default, optional = optional,
+            null = null, pattern = pattern, content = content,
+            implementation = implementation)
 
 
 class JSONDecimalField(JSONDocumentField):
@@ -217,9 +226,12 @@ class JSONDecimalField(JSONDocumentField):
     TYPE = 'number'
 
     def __init__(self, title = None, description = None, default = None,
-        optional = False, null = False, content = None, implementation = None) :
-        super(JSONDecimalField, self).__init__(title, description, default,
-            optional, null, content, implementation)
+        optional = False, null = False, pattern = None, content = None,
+        implementation = None):
+        super(JSONDecimalField, self).__init__(title = title,
+            description = description, default = default, optional = optional,
+            null = null, pattern = pattern, content = content,
+            implementation = implementation)
 
 
 class JSONStringField(JSONDocumentField):
@@ -229,9 +241,12 @@ class JSONStringField(JSONDocumentField):
     TYPE = 'string'
 
     def __init__(self, title = None, description = None, default = None,
-        optional = False, null = False, content = None, implementation = None):
-        super(JSONStringField, self).__init__(title, description, default,
-            optional, null, content, implementation)
+        optional = False, null = False, pattern = None, content = None,
+        implementation = None):
+        super(JSONStringField, self).__init__(title = title,
+            description = description, default = default, optional = optional,
+            null = null, pattern = pattern, content = content,
+            implementation = implementation)
 
 
 class JSONDateTimeField(JSONDocumentField):
@@ -241,9 +256,12 @@ class JSONDateTimeField(JSONDocumentField):
     TYPE = 'string'
 
     def __init__(self, title = None, description = None, default = None,
-        optional = False, null = False, content = None, implementation = None):
-        super(JSONDateTimeField, self).__init__(title, description, default,
-            optional, null, content, implementation)
+        optional = False, null = False, pattern = None, content = None,
+        implementation = None):
+        super(JSONDateTimeField, self).__init__(title = title,
+            description = description, default = default, optional = optional,
+            null = null, pattern = pattern, content = content,
+            implementation = implementation)
 
     def _generate_schema(self):
         schema = super(JSONDateTimeField, self)._generate_schema()
@@ -258,9 +276,12 @@ class JSONDateField(JSONDocumentField):
     TYPE = 'string'
 
     def __init__(self, title = None, description = None, default = None,
-        optional = False, null = False, content = None, implementation = None):
-        super(JSONDateField, self).__init__(title, description, default,
-            optional, null, content, implementation)
+        optional = False, null = False, pattern = None, content = None,
+        implementation = None):
+        super(JSONDateField, self).__init__(title = title,
+            description = description, default = default, optional = optional,
+            null = null, pattern = pattern, content = content,
+            implementation = implementation)
 
 
 class JSONTimeField(JSONDocumentField):
@@ -270,9 +291,12 @@ class JSONTimeField(JSONDocumentField):
     TYPE = 'string'
 
     def __init__(self, title = None, description = None, default = None,
-        optional = False, null = False, content = None, implementation = None):
-        super(JSONTimeField, self).__init__(title, description, default,
-            optional, null, content, implementation)
+        optional = False, null = False, pattern = None, content = None,
+        implementation = None):
+        super(JSONTimeField, self).__init__(title = title,
+            description = description, default = default, optional = optional,
+            null = null, pattern = pattern, content = content,
+            implementation = implementation)
 
 
 class JSONTimeDeltaField(JSONDocumentField):
@@ -284,9 +308,12 @@ class JSONTimeDeltaField(JSONDocumentField):
     PATTERN = r"^(\d+)d (\d+)s (\d+)us$"
 
     def __init__(self, title = None, description = None, default = None,
-        optional = False, null = False, content = None, implementation = None):
-        super(JSONTimeDeltaField, self).__init__(title, description, default,
-            optional, null, content, implementation)
+        optional = False, null = False, pattern = None, content = None,
+        implementation = None):
+        super(JSONTimeDeltaField, self).__init__(title = title,
+            description = description, default = default, optional = optional,
+            null = null, pattern = pattern or self.PATTERN, content = content,
+            implementation = implementation)
 
     def _generate_schema(self) :
         schema = super(JSONTimeDeltaField, self)._generate_schema()
@@ -301,9 +328,12 @@ class JSONObjectField(JSONDocumentField):
     TYPE = 'object'
 
     def __init__(self, title = None, description = None, default = None,
-        optional = False, null = False, content = None, implementation = None):
-        super(JSONObjectField, self).__init__(title, description, default,
-            optional, null, content, implementation)
+        optional = False, null = False, pattern = None, content = None,
+        implementation = None):
+        super(JSONObjectField, self).__init__(title = title,
+            description = description, default = default, optional = optional,
+            null = null, pattern = pattern, content = content,
+            implementation = implementation)
 
     def _generate_schema(self):
         schema = super(JSONObjectField, self)._generate_schema()
@@ -320,9 +350,12 @@ class JSONListField(JSONDocumentField):
     TYPE = 'array'
 
     def __init__(self, title = None, description = None, default = None,
-        optional = False, null = False, content = None, implementation = None):
-        super(JSONListField, self).__init__(title, description, default,
-            optional, null, content, implementation)
+        optional = False, null = False, pattern = None, content = None,
+        implementation = None):
+        super(JSONListField, self).__init__(title = title,
+            description = description, default = default, optional = optional,
+            null = null, pattern = pattern, content = content,
+            implementation = implementation)
 
     def _generate_schema(self):
         schema = super(JSONListField, self)._generate_schema()
