@@ -170,7 +170,7 @@ class JSONDocumentField(object):
         self.default = default
         self.optional = optional
         self.null = null
-        self.pattern = pattern
+        self.pattern = pattern if pattern != None else ''
         self.content = content
         self.implementation = implementation or JSONDocumentFragment
 
