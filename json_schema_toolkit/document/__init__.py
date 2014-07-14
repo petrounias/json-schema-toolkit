@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+ #-*- coding: utf-8 -*-
 #
 # This document is free and open-source software, subject to the OSI-approved
 # BSD license below.
@@ -91,10 +91,10 @@ class JSONDocument(Document):
     """
     """
 
-    def __init__(self, value):
+    def __init__(self, value, validator=None):
         # set _fields before __getattribute__ is processed
         self._fields = {}
-        super(JSONDocument, self).__init__(value, self._generate_schema())
+        super(JSONDocument, self).__init__(value, self._generate_schema(), validator)
 
     def _generate_schema(self):
         base = {
@@ -364,3 +364,21 @@ class JSONListField(JSONDocumentField):
                 self.content]
         return schema
 
+class JSONEmailField(JSONDocumentField):
+    """
+    """
+
+    TYPE = 'string'
+
+    def __init__(self, title = None, description = None, default = None,
+        optional = False, null = False, pattern = None, content = None,
+        implementation = None):
+        super(JSONEmailField, self).__init__(title = title,
+            description = description, default = default, optional = optional,
+            null = null, pattern = pattern, content = content,
+            implementation = implementation)
+
+    def _generate_schema(self):
+        schema = super(JSONEmailField, self)._generate_schema()
+        schema['format'] = 'email'
+        return schema
