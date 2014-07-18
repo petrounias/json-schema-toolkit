@@ -89,12 +89,18 @@ class FragmentProxy(object):
 
 class JSONDocument(Document):
     """
+    A custom validator can be provided. It shall implement the following
+    function
+            
+        validate(schema, value)
+
     """
 
     def __init__(self, value, validator=None):
         # set _fields before __getattribute__ is processed
         self._fields = {}
-        super(JSONDocument, self).__init__(value, self._generate_schema(), validator)
+        super(JSONDocument, self).__init__(value, 
+                self._generate_schema(), validator)
 
     def _generate_schema(self):
         base = {
@@ -242,11 +248,19 @@ class JSONStringField(JSONDocumentField):
 
     def __init__(self, title = None, description = None, default = None,
         optional = False, null = False, pattern = None, content = None,
-        implementation = None):
+        implementation = None,  min_length = None,  max_length = None):
         super(JSONStringField, self).__init__(title = title,
             description = description, default = default, optional = optional,
             null = null, pattern = pattern, content = content,
             implementation = implementation)
+        self.minLength = min_length
+        self.maxLength = max_length
+
+    def _generate_schema(self):
+        schema = super(JSONStringField, self)._generate_schema()
+        schema['minLength'] = self.minLength
+        schema['maxLength'] = self.maxLength
+        return schema
 
 
 class JSONDateTimeField(JSONDocumentField):
@@ -364,7 +378,7 @@ class JSONListField(JSONDocumentField):
                 self.content]
         return schema
 
-class JSONEmailField(JSONDocumentField):
+class JSONEmailField(JSONStringField):
     """
     """
 
