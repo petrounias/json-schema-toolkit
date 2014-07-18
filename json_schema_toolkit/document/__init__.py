@@ -218,11 +218,19 @@ class JSONIntegerField(JSONDocumentField):
 
     def __init__(self, title = None, description = None, default = None,
         optional = False, null = False, pattern = None, content = None,
-        implementation = None):
+        implementation = None, max_value = None, min_value = None):
         super(JSONIntegerField, self).__init__(title = title,
             description = description, default = default, optional = optional,
             null = null, pattern = pattern, content = content,
             implementation = implementation)
+        self.minimum = min_value
+        self.maximum = max_value
+
+    def _generate_schema(self):
+        schema = super(JSONIntegerField, self)._generate_schema()
+        schema['minimum'] = self.minimum
+        schema['maximum'] = self.maximum
+        return schema
 
 
 class JSONDecimalField(JSONDocumentField):
@@ -233,11 +241,19 @@ class JSONDecimalField(JSONDocumentField):
 
     def __init__(self, title = None, description = None, default = None,
         optional = False, null = False, pattern = None, content = None,
-        implementation = None):
+        implementation = None, max_value = None, min_value = None):
         super(JSONDecimalField, self).__init__(title = title,
             description = description, default = default, optional = optional,
             null = null, pattern = pattern, content = content,
             implementation = implementation)
+        self.minimum = min_value
+        self.maximum = max_value
+
+    def _generate_schema(self):
+        schema = super(JSONDecimalField, self)._generate_schema()
+        schema['minimum'] = self.minimum
+        schema['maximum'] = self.maximum
+        return schema
 
 
 class JSONStringField(JSONDocumentField):
