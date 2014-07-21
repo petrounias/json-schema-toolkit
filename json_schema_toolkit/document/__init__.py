@@ -415,3 +415,22 @@ class JSONEmailField(JSONStringField):
         schema['format'] = 'email'
         return schema
 
+class JSONIPAddressField(JSONStringField):
+    """
+    """
+
+    TYPE = 'string'
+
+    def __init__(self, title = None, description = None, default = None,
+        optional = False, null = False, pattern = None, content = None,
+        enum = None, protocol=None, implementation = None):
+        super(JSONIPAddressField, self).__init__(title = title,
+            description = description, default = default, optional = optional,
+            null = null, pattern = pattern, content = content, enum = enum,
+            implementation = implementation)
+        self.protocol = protocol if protocol is not None else 'ipv4'
+
+    def _generate_schema(self):
+        schema = super(JSONIPAddressField, self)._generate_schema()
+        schema['format'] = self.protocol
+        return schema
