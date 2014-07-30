@@ -178,11 +178,12 @@ class JSONDocumentField(object):
         self.null = null
         self.pattern = pattern if pattern is not None else ''
         self.content = content
-        self.enum = enum if enum is not None else []
+        self.enum = enum
         self.implementation = implementation or JSONDocumentFragment
 
     def _generate_schema(self):
-        return {
+    
+        SCHEMA = {
             'type' : self.TYPE if not self.null else [ self.TYPE, 'null', ],
             'title' : self.title,
             'description' : self.description,
@@ -191,12 +192,15 @@ class JSONDocumentField(object):
             'null' : self.null,
             'pattern' : self.pattern,
             'properties' : {},
-            'enum': self.enum,
             '__field' : self,
             '__fragment_cls' : self.implementation,
         }
 
+        if self.enum is not None:
+            SCHEMA['enum']=self.enum
 
+        return SCHEMA
+    
 class JSONBooleanField(JSONDocumentField):
     """
     """
