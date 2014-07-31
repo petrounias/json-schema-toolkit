@@ -420,8 +420,6 @@ class JSONEmailField(JSONStringField):
     """
     """
 
-    TYPE = 'string'
-
     def __init__(self, title = None, description = None, default = None,
         optional = False, null = False, pattern = None, content = None,
         enum = None, implementation = None):
@@ -439,8 +437,6 @@ class JSONIPAddressField(JSONStringField):
     """
     """
 
-    TYPE = 'string'
-
     def __init__(self, title = None, description = None, default = None,
         optional = False, null = False, pattern = None, content = None,
         enum = None, protocol=None, implementation = None):
@@ -454,3 +450,4 @@ class JSONIPAddressField(JSONStringField):
         schema = super(JSONIPAddressField, self)._generate_schema()
         schema['format'] = self.protocol
         return schema
+
