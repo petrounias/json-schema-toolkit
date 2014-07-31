@@ -234,8 +234,8 @@ class JSONIntegerField(JSONDocumentField):
 
     def _generate_schema(self):
         schema = super(JSONIntegerField, self)._generate_schema()
-        schema['minimum'] = self.minimum
-        schema['maximum'] = self.maximum
+        if self.minimum is not None: schema['minimum'] = self.minimum
+        if self.maximum is not None: schema['maximum'] = self.maximum
         return schema
 
 
@@ -257,8 +257,8 @@ class JSONDecimalField(JSONDocumentField):
 
     def _generate_schema(self):
         schema = super(JSONDecimalField, self)._generate_schema()
-        schema['minimum'] = self.minimum
-        schema['maximum'] = self.maximum
+        if self.minimum is not None: schema['minimum'] = self.minimum
+        if self.maximum is not None: schema['maximum'] = self.maximum
         return schema
 
 
@@ -280,8 +280,8 @@ class JSONStringField(JSONDocumentField):
 
     def _generate_schema(self):
         schema = super(JSONStringField, self)._generate_schema()
-        schema['minLength'] = self.minLength
-        schema['maxLength'] = self.maxLength
+        if self.minLength: schema['minLength'] = self.minLength
+        if self.maxLength: schema['maxLength'] = self.maxLength
         return schema
 
 
