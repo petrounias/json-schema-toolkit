@@ -311,12 +311,21 @@ class JSONDateField(JSONDocumentField):
 
     TYPE = 'string'
 
+    # PATTERN matching the following date formats:
+    # - YYYY-MM-DD
+    # - MM/DD/YYYY
+    # - MM/DD/YY
+
+    PATTERN = (r"^(19|20)\d\d[-](0[1-9]|1[012])[-](0[1-9]|[12][0-9]|3[01])$|"
+                "^(0[1-9]|1[012])[/](0[1-9]|[12][0-9]|3[01])[/](19|20)\d\d$|"
+                "^(0[1-9]|1[012])[/](0[1-9]|[12][0-9]|3[01])[/]\d\d$")
+
     def __init__(self, title = None, description = None, default = None,
         optional = False, null = False, pattern = None, content = None,
         enum = None, implementation = None):
         super(JSONDateField, self).__init__(title = title,
             description = description, default = default, optional = optional,
-            null = null, pattern = pattern, content = content, enum = enum,
+            null = null, pattern = pattern or self.PATTERN, content = content, enum = enum,
             implementation = implementation)
 
 
@@ -326,12 +335,19 @@ class JSONTimeField(JSONDocumentField):
 
     TYPE = 'string'
 
+    # PATTERN matching the following time formats:
+    # - HH:MM:SS
+    # - HH:MM
+    
+    PATTERN = (r"^([0-1]?[0-9]|[2][0-3]):([0-5][0-9])$|"
+                "^([0-1]?[0-9]|[2][0-3]):([0-5][0-9]):([0-5][0-9])$")
+
     def __init__(self, title = None, description = None, default = None,
         optional = False, null = False, pattern = None, content = None,
         enum = None, implementation = None):
         super(JSONTimeField, self).__init__(title = title,
             description = description, default = default, optional = optional,
-            null = null, pattern = pattern, content = content, enum = enum,
+            null = null, pattern = pattern or self.PATTERN, content = content, enum = enum,
             implementation = implementation)
 
 
