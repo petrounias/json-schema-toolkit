@@ -280,8 +280,8 @@ class JSONStringField(JSONDocumentField):
 
     def _generate_schema(self):
         schema = super(JSONStringField, self)._generate_schema()
-        if self.minLength: schema['minLength'] = self.minLength
-        if self.maxLength: schema['maxLength'] = self.maxLength
+        if self.minLength is not None: schema['minLength'] = self.minLength
+        if self.maxLength is not None: schema['maxLength'] = self.maxLength
         return schema
 
 
@@ -422,11 +422,12 @@ class JSONEmailField(JSONStringField):
 
     def __init__(self, title = None, description = None, default = None,
         optional = False, null = False, pattern = None, content = None,
-        enum = None, implementation = None):
+        enum = None, implementation = None, min_length = None,  max_length = None):
         super(JSONEmailField, self).__init__(title = title,
             description = description, default = default, optional = optional,
             null = null, pattern = pattern, content = content, enum = enum,
-            implementation = implementation)
+            implementation = implementation, min_length = min_length, 
+            max_length = max_length)
 
     def _generate_schema(self):
         schema = super(JSONEmailField, self)._generate_schema()
@@ -450,4 +451,37 @@ class JSONIPAddressField(JSONStringField):
         schema = super(JSONIPAddressField, self)._generate_schema()
         schema['format'] = self.protocol
         return schema
+
+class JSONSlugField(JSONStringField):
+    """
+    """
+    
+    PATTERN = r"^[a-z0-9-]+$"
+
+    def __init__(self, title = None, description = None, default = None,
+        optional = False, null = False, pattern = None, content = None,
+        enum = None, implementation = None, min_length = None,  max_length = None):
+        super(JSONSlugField, self).__init__(title = title,
+            description = description, default = default, optional = optional,
+            null = null, pattern = pattern or self.PATTERN, content = content,
+            enum = enum, implementation = implementation, min_length = min_length,
+            max_length = max_length)
+
+class JSONURLField(JSONStringField):
+    """
+    """
+    # Pattern based on django's URLValidator regex pattern
+    PATTERN = (r"^(http|ftp)s?://(([A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)"
+                "+([A-Za-z]{2,6}\.?|[A-Za-z0-9-]{2,}\.?)|localhost|\d{1,3}\."
+                "\d{1,3}\.\d{1,3}\.\d{1,3}|\[?[a-fA-F0-9]*:[A-Fa-f0-9:]+\]?)"
+                "(:\d+)?(/?|[/?]\S+)$")
+
+    def __init__(self, title = None, description = None, default = None,
+        optional = False, null = False, pattern = None, content = None,
+        enum = None, implementation = None, min_length = None,  max_length = None):
+        super(JSONURLField, self).__init__(title = title,
+            description = description, default = default, optional = optional,
+            null = null, pattern = pattern or self.PATTERN, content = content, enum = enum,
+            implementation = implementation, min_length = min_length, 
+            max_length = max_length)
 
