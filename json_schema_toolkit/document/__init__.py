@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+ #-*- coding: utf-8 -*-
 #
 # This document is free and open-source software, subject to the OSI-approved
 # BSD license below.
@@ -89,12 +89,18 @@ class FragmentProxy(object):
 
 class JSONDocument(Document):
     """
+    A custom validator can be provided. It shall implement the following
+    function
+            
+        validate(schema, value)
+
     """
 
-    def __init__(self, value):
+    def __init__(self, value, validator=None):
         # set _fields before __getattribute__ is processed
         self._fields = {}
-        super(JSONDocument, self).__init__(value, self._generate_schema())
+        super(JSONDocument, self).__init__(value, 
+                self._generate_schema(), validator)
 
     def _generate_schema(self):
         base = {
@@ -162,20 +168,22 @@ class JSONDocumentField(object):
     TYPE = 'any'
 
     def __init__(self, title = None, description = None, default = None,
-        optional = False, null = False, pattern = None, content = None,
-        implementation = None):
+        optional = False, null = False, pattern = None, content = None, 
+        enum = None, implementation = None):
         super(JSONDocumentField, self).__init__()
         self.title = title
         self.description = description
         self.default = default
         self.optional = optional
         self.null = null
-        self.pattern = pattern
+        self.pattern = pattern if pattern is not None else ''
         self.content = content
+        self.enum = enum
         self.implementation = implementation or JSONDocumentFragment
 
     def _generate_schema(self):
-        return {
+    
+        SCHEMA = {
             'type' : self.TYPE if not self.null else [ self.TYPE, 'null', ],
             'title' : self.title,
             'description' : self.description,
@@ -188,7 +196,11 @@ class JSONDocumentField(object):
             '__fragment_cls' : self.implementation,
         }
 
+        if self.enum is not None:
+            SCHEMA['enum']=self.enum
 
+        return SCHEMA
+    
 class JSONBooleanField(JSONDocumentField):
     """
     """
@@ -197,10 +209,10 @@ class JSONBooleanField(JSONDocumentField):
 
     def __init__(self, title = None, description = None, default = None,
         optional = False, null = False, pattern = None, content = None,
-        implementation = None):
+        enum = None, implementation = None):
         super(JSONBooleanField, self).__init__(title = title,
             description = description, default = default, optional = optional,
-            null = null, pattern = pattern, content = content,
+            null = null, pattern = pattern, content = content, enum = enum,
             implementation = implementation)
 
 
@@ -212,11 +224,19 @@ class JSONIntegerField(JSONDocumentField):
 
     def __init__(self, title = None, description = None, default = None,
         optional = False, null = False, pattern = None, content = None,
-        implementation = None):
+        enum = None, implementation = None, max_value = None, min_value = None):
         super(JSONIntegerField, self).__init__(title = title,
             description = description, default = default, optional = optional,
-            null = null, pattern = pattern, content = content,
+            null = null, pattern = pattern, content = content, enum = enum,
             implementation = implementation)
+        self.minimum = min_value
+        self.maximum = max_value
+
+    def _generate_schema(self):
+        schema = super(JSONIntegerField, self)._generate_schema()
+        if self.minimum is not None: schema['minimum'] = self.minimum
+        if self.maximum is not None: schema['maximum'] = self.maximum
+        return schema
 
 
 class JSONDecimalField(JSONDocumentField):
@@ -227,11 +247,19 @@ class JSONDecimalField(JSONDocumentField):
 
     def __init__(self, title = None, description = None, default = None,
         optional = False, null = False, pattern = None, content = None,
-        implementation = None):
+        enum = None, implementation = None, max_value = None, min_value = None):
         super(JSONDecimalField, self).__init__(title = title,
             description = description, default = default, optional = optional,
-            null = null, pattern = pattern, content = content,
+            null = null, pattern = pattern, content = content, enum = enum,
             implementation = implementation)
+        self.minimum = min_value
+        self.maximum = max_value
+
+    def _generate_schema(self):
+        schema = super(JSONDecimalField, self)._generate_schema()
+        if self.minimum is not None: schema['minimum'] = self.minimum
+        if self.maximum is not None: schema['maximum'] = self.maximum
+        return schema
 
 
 class JSONStringField(JSONDocumentField):
@@ -242,11 +270,19 @@ class JSONStringField(JSONDocumentField):
 
     def __init__(self, title = None, description = None, default = None,
         optional = False, null = False, pattern = None, content = None,
-        implementation = None):
+        enum = None, implementation = None,  min_length = None,  max_length = None):
         super(JSONStringField, self).__init__(title = title,
             description = description, default = default, optional = optional,
-            null = null, pattern = pattern, content = content,
+            null = null, pattern = pattern, content = content, enum = enum,
             implementation = implementation)
+        self.minLength = min_length
+        self.maxLength = max_length
+
+    def _generate_schema(self):
+        schema = super(JSONStringField, self)._generate_schema()
+        if self.minLength is not None: schema['minLength'] = self.minLength
+        if self.maxLength is not None: schema['maxLength'] = self.maxLength
+        return schema
 
 
 class JSONDateTimeField(JSONDocumentField):
@@ -257,10 +293,10 @@ class JSONDateTimeField(JSONDocumentField):
 
     def __init__(self, title = None, description = None, default = None,
         optional = False, null = False, pattern = None, content = None,
-        implementation = None):
+        enum = None, implementation = None):
         super(JSONDateTimeField, self).__init__(title = title,
             description = description, default = default, optional = optional,
-            null = null, pattern = pattern, content = content,
+            null = null, pattern = pattern, content = content, enum = enum,
             implementation = implementation)
 
     def _generate_schema(self):
@@ -275,12 +311,21 @@ class JSONDateField(JSONDocumentField):
 
     TYPE = 'string'
 
+    # PATTERN matching the following date formats:
+    # - YYYY-MM-DD
+    # - MM/DD/YYYY
+    # - MM/DD/YY
+
+    PATTERN = (r"^(19|20)\d\d[-](0[1-9]|1[012])[-](0[1-9]|[12][0-9]|3[01])$|"
+                "^(0[1-9]|1[012])[/](0[1-9]|[12][0-9]|3[01])[/](19|20)\d\d$|"
+                "^(0[1-9]|1[012])[/](0[1-9]|[12][0-9]|3[01])[/]\d\d$")
+
     def __init__(self, title = None, description = None, default = None,
         optional = False, null = False, pattern = None, content = None,
-        implementation = None):
+        enum = None, implementation = None):
         super(JSONDateField, self).__init__(title = title,
             description = description, default = default, optional = optional,
-            null = null, pattern = pattern, content = content,
+            null = null, pattern = pattern or self.PATTERN, content = content, enum = enum,
             implementation = implementation)
 
 
@@ -290,12 +335,19 @@ class JSONTimeField(JSONDocumentField):
 
     TYPE = 'string'
 
+    # PATTERN matching the following time formats:
+    # - HH:MM:SS
+    # - HH:MM
+    
+    PATTERN = (r"^([0-1]?[0-9]|[2][0-3]):([0-5][0-9])$|"
+                "^([0-1]?[0-9]|[2][0-3]):([0-5][0-9]):([0-5][0-9])$")
+
     def __init__(self, title = None, description = None, default = None,
         optional = False, null = False, pattern = None, content = None,
-        implementation = None):
+        enum = None, implementation = None):
         super(JSONTimeField, self).__init__(title = title,
             description = description, default = default, optional = optional,
-            null = null, pattern = pattern, content = content,
+            null = null, pattern = pattern or self.PATTERN, content = content, enum = enum,
             implementation = implementation)
 
 
@@ -309,11 +361,11 @@ class JSONTimeDeltaField(JSONDocumentField):
 
     def __init__(self, title = None, description = None, default = None,
         optional = False, null = False, pattern = None, content = None,
-        implementation = None):
+        enum = None, implementation = None):
         super(JSONTimeDeltaField, self).__init__(title = title,
             description = description, default = default, optional = optional,
             null = null, pattern = pattern or self.PATTERN, content = content,
-            implementation = implementation)
+            enum = enum, implementation = implementation)
 
     def _generate_schema(self) :
         schema = super(JSONTimeDeltaField, self)._generate_schema()
@@ -329,10 +381,10 @@ class JSONObjectField(JSONDocumentField):
 
     def __init__(self, title = None, description = None, default = None,
         optional = False, null = False, pattern = None, content = None,
-        implementation = None):
+        enum = None, implementation = None):
         super(JSONObjectField, self).__init__(title = title,
             description = description, default = default, optional = optional,
-            null = null, pattern = pattern, content = content,
+            null = null, pattern = pattern, content = content, enum = enum,
             implementation = implementation)
 
     def _generate_schema(self):
@@ -351,10 +403,10 @@ class JSONListField(JSONDocumentField):
 
     def __init__(self, title = None, description = None, default = None,
         optional = False, null = False, pattern = None, content = None,
-        implementation = None):
+        enum = None, implementation = None):
         super(JSONListField, self).__init__(title = title,
             description = description, default = default, optional = optional,
-            null = null, pattern = pattern, content = content,
+            null = null, pattern = pattern, content = content, enum = enum,
             implementation = implementation)
 
     def _generate_schema(self):
@@ -363,4 +415,73 @@ class JSONListField(JSONDocumentField):
             schema['items'] = [value._generate_schema() for value in
                 self.content]
         return schema
+
+class JSONEmailField(JSONStringField):
+    """
+    """
+
+    def __init__(self, title = None, description = None, default = None,
+        optional = False, null = False, pattern = None, content = None,
+        enum = None, implementation = None, min_length = None,  max_length = None):
+        super(JSONEmailField, self).__init__(title = title,
+            description = description, default = default, optional = optional,
+            null = null, pattern = pattern, content = content, enum = enum,
+            implementation = implementation, min_length = min_length, 
+            max_length = max_length)
+
+    def _generate_schema(self):
+        schema = super(JSONEmailField, self)._generate_schema()
+        schema['format'] = 'email'
+        return schema
+
+class JSONIPAddressField(JSONStringField):
+    """
+    """
+
+    def __init__(self, title = None, description = None, default = None,
+        optional = False, null = False, pattern = None, content = None,
+        enum = None, protocol=None, implementation = None):
+        super(JSONIPAddressField, self).__init__(title = title,
+            description = description, default = default, optional = optional,
+            null = null, pattern = pattern, content = content, enum = enum,
+            implementation = implementation)
+        self.protocol = protocol if protocol is not None else 'ipv4'
+
+    def _generate_schema(self):
+        schema = super(JSONIPAddressField, self)._generate_schema()
+        schema['format'] = self.protocol
+        return schema
+
+class JSONSlugField(JSONStringField):
+    """
+    """
+    
+    PATTERN = r"^[a-z0-9-]+$"
+
+    def __init__(self, title = None, description = None, default = None,
+        optional = False, null = False, pattern = None, content = None,
+        enum = None, implementation = None, min_length = None,  max_length = None):
+        super(JSONSlugField, self).__init__(title = title,
+            description = description, default = default, optional = optional,
+            null = null, pattern = pattern or self.PATTERN, content = content,
+            enum = enum, implementation = implementation, min_length = min_length,
+            max_length = max_length)
+
+class JSONURLField(JSONStringField):
+    """
+    """
+    # Pattern based on django's URLValidator regex pattern
+    PATTERN = (r"^(http|ftp)s?://(([A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)"
+                "+([A-Za-z]{2,6}\.?|[A-Za-z0-9-]{2,}\.?)|localhost|\d{1,3}\."
+                "\d{1,3}\.\d{1,3}\.\d{1,3}|\[?[a-fA-F0-9]*:[A-Fa-f0-9:]+\]?)"
+                "(:\d+)?(/?|[/?]\S+)$")
+
+    def __init__(self, title = None, description = None, default = None,
+        optional = False, null = False, pattern = None, content = None,
+        enum = None, implementation = None, min_length = None,  max_length = None):
+        super(JSONURLField, self).__init__(title = title,
+            description = description, default = default, optional = optional,
+            null = null, pattern = pattern or self.PATTERN, content = content, enum = enum,
+            implementation = implementation, min_length = min_length, 
+            max_length = max_length)
 
