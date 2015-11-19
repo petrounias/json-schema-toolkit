@@ -40,5 +40,5 @@ __maintainer__ = (u"Alexis Petrounias <www.petrounias.org>", )
 __author__ = (u"Alexis Petrounias <www.petrounias.org>", )
 
 
-VERSION = (1, 0, 0, 'alpha', 1)
+VERSION = (1, 0, 0, 'beta', 1)
 
